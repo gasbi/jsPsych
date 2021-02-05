@@ -283,7 +283,7 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       let label = trial.labels[i];
       html += `
       <div id="jspsych-video-semantic-diff-response-response" class="jspsych-semantic-diff-opt" style="grid-area: o${i}">
-        <input type="radio" name="response" value="${label}" ${
+        <input type="radio" name="response" value="${i}" ${
         !trial.response_allowed_while_playing ? "disabled" : ""
       } />
       </div>
@@ -303,14 +303,8 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
     }
 
     // add submit button
-    var next_disabled_attribute = "";
-    if (trial.require_movement | !trial.response_allowed_while_playing) {
-      next_disabled_attribute = "disabled";
-    }
     html +=
-      '<button id="jspsych-video-semantic-diff-response-next" class="jspsych-btn" ' +
-      next_disabled_attribute +
-      ">" +
+      '<button id="jspsych-video-semantic-diff-response-next" class="jspsych-btn" disabled>' +
       trial.button_label +
       "</button>";
 
@@ -356,16 +350,6 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       });
     }
 
-    if (trial.require_movement) {
-      display_element
-        .querySelector("#jspsych-video-semantic-diff-response-response")
-        .addEventListener("click", function () {
-          display_element.querySelector(
-            "#jspsych-video-semantic-diff-response-next"
-          ).disabled = false;
-        });
-    }
-
     var startTime = performance.now();
 
     // store response
@@ -380,9 +364,13 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
         // measure response time
         var endTime = performance.now();
         response.rt = endTime - startTime;
-        response.response = display_element.querySelector(
-          "#jspsych-video-semantic-diff-response-response"
-        ).valueAsNumber;
+        response.response = display_element.querySelectorAll(
+          ".jspsych-semantic-diff-opt input"
+        );
+        for (let i = 0; i < inputElems.length; i++) {
+          let input = inputElems[i];
+          if (input.checked) response.response = input.value;
+        }
 
         if (trial.response_ends_trial) {
           end_trial();
@@ -392,6 +380,17 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
           ).disabled = true;
         }
       });
+
+    let inputElems = display_element.querySelectorAll(
+      ".jspsych-semantic-diff-opt input"
+    );
+    for (let i = 0; i < inputElems.length; i++) {
+      inputElems[i].addEventListener("change", function () {
+        display_element.querySelector(
+          "#jspsych-video-semantic-diff-response-next"
+        ).disabled = false;
+      });
+    }
 
     // function to end trial when it is time
     function end_trial() {
