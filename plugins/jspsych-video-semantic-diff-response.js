@@ -144,6 +144,18 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
     let html = "";
 
     // inject CSS stylesheet for plugin
+    let css_grid_cols = "auto";
+    let css_grid_areas_r1 = "pl";
+    let css_grid_areas_r2 = ".";
+    for (let i = 0; i < trial.labels.length; i++) {
+      css_grid_cols += " 1fr";
+      css_grid_areas_r1 += " o" + i;
+      css_grid_areas_r2 += " l" + i;
+    }
+    css_grid_cols += " auto";
+    css_grid_areas_r1 += " pr";
+    css_grid_areas_r2 += " .";
+
     html += `<style id="jspsych-survey-likert-css">
 .jspsych-survey-semantic-diff-statement {
   display: block;
@@ -157,11 +169,11 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
   margin: 0 auto 3em auto;
   width: auto;
   display: grid;
-  grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr auto;
+  grid-template-columns: ${css_grid_cols};
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "pl o0 o1 o2 o3 o4 pr"
-    ". l0 l1 l2 l3 l4 .";
+    "${css_grid_areas_r1}"
+    "${css_grid_areas_r2}";
 }
 
 .jspsych-semantic-diff-pole {
@@ -369,7 +381,7 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
         );
         for (let i = 0; i < inputElems.length; i++) {
           let input = inputElems[i];
-          if (input.checked) response.response = input.value;
+          if (input.checked) response.response = Number(input.value);
         }
 
         if (trial.response_ends_trial) {
