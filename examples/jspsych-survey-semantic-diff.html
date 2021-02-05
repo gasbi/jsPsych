@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-semantic-diff.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+    var semantic_credibility_expert = {
+      type: "survey-semantic-diff",
+      questions: [
+        {
+          prompt: "",
+          labels: ["1", "2", "3", "4", "5"],
+          poles: ["Intelligent", "Unintelligent"],
+          required: true,
+          name: "m_credibility_expert_1",
+        },
+        {
+          prompt: "",
+          labels: ["1", "2", "3", "4", "5"],
+          poles: ["Expert", "Inexpert"],
+          required: true,
+          name: "m_credibility_expert_2",
+        },
+      ],
+      randomize_question_order: false,
+      scale_width: 800,
+      preamble: "Do you think the robot is...</p>",
+    };
+
+    jsPsych.init({
+      timeline: [semantic_credibility_expert],
+      on_finish: function () {
+        jsPsych.data.displayData();
+      },
+    });
+  </script>
+</html>
