@@ -81,9 +81,9 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       poles: {
         type: jsPsych.plugins.parameterType.STRING,
         array: true,
-        pretty_name: 'Poles labels',
+        pretty_name: "Poles labels",
         default: undefined,
-        description: 'Pole options for semantic difference.'
+        description: "Pole options for semantic difference.",
       },
       labels: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
@@ -104,13 +104,6 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
         default: "Continue",
         array: false,
         description: "Label of the button to advance.",
-      },
-      require_movement: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: "Require movement",
-        default: false,
-        description:
-          "If true, the participant will have to move the slider before continuing.",
       },
       trial_ends_after_video: {
         type: jsPsych.plugins.parameterType.BOOL,
@@ -290,7 +283,7 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       let label = trial.labels[i];
       html += `
       <div id="jspsych-video-semantic-diff-response-response" class="jspsych-semantic-diff-opt" style="grid-area: o${i}">
-        <input type="radio" value="${label}" ${
+        <input type="radio" name="response" value="${label}" ${
         !trial.response_allowed_while_playing ? "disabled" : ""
       } />
       </div>
@@ -335,7 +328,7 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       if (trial.trial_ends_after_video) {
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
-        enable_slider();
+        enable_response();
       }
     };
 
@@ -431,14 +424,10 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
     }
 
     // function to enable slider after video ends
-    function enable_slider() {
-      document.querySelector(
-        "#jspsych-video-semantic-diff-response-response"
-      ).disabled = false;
-      if (!trial.require_movement) {
-        document.querySelector(
-          "#jspsych-video-semantic-diff-response-next"
-        ).disabled = false;
+    function enable_response() {
+      let elems = document.querySelectorAll(".jspsych-semantic-diff-opt input");
+      for (let i = 0; i < elems.length; i++) {
+        elems[i].disabled = false;
       }
     }
 
