@@ -2,7 +2,7 @@
  * jspsych-video-semantic-diff-response
  * Gaspar Isaac Melsion <gimp@kth.se>, February 2021
  *
- * plugin for playing a video file and getting a semantic diff response
+ * plugin for playing a video file and getting a semantic difference response
  *
  * documentation: docs.jspsych.org
  *
