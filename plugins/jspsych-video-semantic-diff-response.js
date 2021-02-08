@@ -59,6 +59,14 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
         description:
           "If true, the subject will be able to pause the video or move the playback to any point in the video.",
       },
+      controls_after_autoplay: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: "Controls after autoplay ended",
+        default: false,
+        description:
+          "If true, the subject will be able to pause the video or move the playback to any point in the video, only after this has been played once. " +
+          "It has no effect if autoplay is false or if controls is true.",
+      },
       start: {
         type: jsPsych.plugins.parameterType.FLOAT,
         pretty_name: "Start",
@@ -336,6 +344,9 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       } else if (!trial.response_allowed_while_playing) {
         enable_response();
       }
+      if (trial.autoplay && !trial.controls && trial.controls_after_autoplay) {
+        enable_controls();
+      }
     };
 
     video_element.playbackRate = trial.rate;
@@ -440,6 +451,12 @@ jsPsych.plugins["video-semantic-diff-response"] = (function () {
       for (let i = 0; i < elems.length; i++) {
         elems[i].disabled = false;
       }
+    }
+
+    function enable_controls() {
+      display_element.querySelector(
+        "#jspsych-video-semantic-diff-response-stimulus-video"
+      ).controls = true;
     }
 
     // end trial if time limit is set
