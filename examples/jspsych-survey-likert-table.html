@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-likert-table.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+    var scale = [
+      "Strongly Disagree",
+      "Disagree",
+      "Neutral",
+      "Agree",
+      "Strongly Agree",
+    ];
+
+    var likert_trial = {
+      type: "survey-likert-table",
+      labels: scale,
+      questions: [
+        { prompt: "I like vegetables and this is a long statement.", name: "Vegetables", required: true },
+        { prompt: "I like fruit.", name: "Fruit", required: true },
+      ],
+      alternate_row_color: true,
+      table_width: "600px"
+    };
+
+    var likert_trial_random_order = {
+      type: "survey-likert-table",
+      labels: scale,
+      questions: [
+        { prompt: "Question 1" },
+        { prompt: "Question 2" },
+        { prompt: "Question 3" },
+        { prompt: "Question 4" },
+        { prompt: "Question 5" },
+      ],
+      randomize_question_order: true,
+      scale_width: 500,
+    };
+
+    jsPsych.init({
+      timeline: [likert_trial, likert_trial_random_order],
+      on_finish: function () {
+        jsPsych.data.displayData();
+      },
+    });
+  </script>
+</html>
